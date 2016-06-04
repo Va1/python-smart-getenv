@@ -5,22 +5,24 @@ from ast import literal_eval
 __version__ = '1.1.0'
 
 
-def getenv(name, **kwargs):
+__version__ = '1.0.5'
+
+
+def getenv(name, default=None, **kwargs):
     """
     Retrieves environment variable by name and casts the value to desired type.
     If desired type is list or tuple - uses separator to split the value.
     """
-    default_value = kwargs.pop('default', None)
     desired_type = kwargs.pop('type', str)
     list_separator = kwargs.pop('separator', ',')
 
     value = os.getenv(name, None)
 
     if value is None:
-        if default_value is None:
+        if default is None:
             return None
         else:
-            return default_value
+            return default
 
     if desired_type is bool:
         if value.lower() in ['false', '0']:

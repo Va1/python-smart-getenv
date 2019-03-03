@@ -1,8 +1,7 @@
 import os
 from ast import literal_eval
 
-
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 
 def getenv(name, **kwargs):
@@ -10,9 +9,11 @@ def getenv(name, **kwargs):
     Retrieves environment variable by name and casts the value to desired type.
     If desired type is list or tuple - uses separator to split the value.
     """
-    default_value = kwargs.pop('default', None)
-    desired_type = kwargs.pop('type', str)
-    list_separator = kwargs.pop('separator', ',')
+    default_value = kwargs.get('default', None)
+    list_separator = kwargs.get('separator', ',')
+    desired_type = kwargs.get('type')
+    if not desired_type and default_value is not None:
+        desired_type = type(default_value)
 
     value = os.getenv(name, None)
 
@@ -28,7 +29,7 @@ def getenv(name, **kwargs):
         else:
             return bool(value)
 
-    if desired_type is list or desired_type is tuple:
+    if desired_type in (list, tuple):
         value = value.split(list_separator)
         return desired_type(value)
 

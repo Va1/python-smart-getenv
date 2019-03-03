@@ -38,13 +38,23 @@ Get them:
     'true'
     >>> getenv('BOOLEAN', type=bool)
     True
+    >>> getenv('BOOLEAN', default=False)
+    True
     >>> getenv('LIST', type=list)
+    ['a', 'b', 'c']
+    >>> getenv('LIST', default=[1, 2, 3])
     ['a', 'b', 'c']
     >>> getenv('LIST', type=tuple)
     ('a', 'b', 'c')
+    >>> getenv('LIST', default=(1, 2, 3))
+    ('a', 'b', 'c')
     >>> getenv('TRICKY_LIST', type=list, separator=':')
     ['d', 'e', 'f']
+    >>> getenv('TRICKY_LIST', default=[1, 2, 3], separator=':')
+    ['d', 'e', 'f']
     >>> getenv('DICT', type=dict)
+    {'foo': 'bar'}
+    >>> getenv('DICT', default={'key': 'value'})
     {'foo': 'bar'}
     >>> getenv('LOST', default='default value anyone?')
     'default value anyone?'

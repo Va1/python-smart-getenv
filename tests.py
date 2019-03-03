@@ -40,6 +40,7 @@ class GetenvTests(unittest.TestCase):
         """
         os.environ[self.test_var_name] = 'abc'
         self.assertEqual(getenv(self.test_var_name, type=str), 'abc')
+        self.assertEqual(getenv(self.test_var_name, default='qwe'), 'abc')
 
     def test_getenv_type_int(self):
         """
@@ -58,6 +59,9 @@ class GetenvTests(unittest.TestCase):
         except ValueError:
             pass
 
+        os.environ[self.test_var_name] = '2'
+        self.assertEqual(getenv(self.test_var_name, default=1), 2)
+
     def test_getenv_type_float(self):
         """
         If environment variable exists and desired type is float:
@@ -74,6 +78,9 @@ class GetenvTests(unittest.TestCase):
                       ' non-castable to float value should fail with exception!')
         except ValueError:
             pass
+
+        os.environ[self.test_var_name] = '123.4'
+        self.assertEqual(getenv(self.test_var_name, default=245.6), 123.4)
 
     def test_getenv_type_bool(self):
         """
@@ -106,6 +113,9 @@ class GetenvTests(unittest.TestCase):
         os.environ[self.test_var_name] = ''
         self.assertEqual(getenv(self.test_var_name, type=bool), False)
 
+        os.environ[self.test_var_name] = 'absolutely not a boolean'
+        self.assertEqual(getenv(self.test_var_name, default=False), True)
+
     def test_getenv_type_list(self):
         """
         If environment variable exists and desired type is list:
@@ -125,6 +135,9 @@ class GetenvTests(unittest.TestCase):
         os.environ[self.test_var_name] = 'a:b:c'
         self.assertEqual(getenv(self.test_var_name, type=list, separator=':'), ['a', 'b', 'c'])
 
+        os.environ[self.test_var_name] = 'a,b,c'
+        self.assertEqual(getenv(self.test_var_name, default=[1, 2]), ['a', 'b', 'c'])
+
     def test_getenv_type_tuple(self):
         """
         If environment variable exists and desired type is tuple:
@@ -143,6 +156,9 @@ class GetenvTests(unittest.TestCase):
 
         os.environ[self.test_var_name] = 'a:b:c'
         self.assertEqual(getenv(self.test_var_name, type=tuple, separator=':'), ('a', 'b', 'c'))
+
+        os.environ[self.test_var_name] = 'a,b,c'
+        self.assertEqual(getenv(self.test_var_name, default=(1, 2)), ('a', 'b', 'c'))
 
     def test_getenv_type_dict(self):
         """
@@ -168,6 +184,9 @@ class GetenvTests(unittest.TestCase):
             pass
         except SyntaxError:
             pass
+
+        os.environ[self.test_var_name] = '{    "key":    "value"      }'
+        self.assertEqual(getenv(self.test_var_name, default={"key": "other value"}), {'key': 'value'})
 
 
 if __name__ == '__main__':
